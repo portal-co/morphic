@@ -1,0 +1,5 @@
+{
+  "name": "@portal-solutions/morphic",
+  "workspaces": [],
+  "description": "A modern UI and rendering framework, inspired by X11, SwiftUI, and the Web"
+}
