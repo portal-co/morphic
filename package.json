@@ -1,5 +1,8 @@
 {
   "name": "@portal-solutions/morphic",
-  "workspaces": [],
+  "workspaces": [
+    "crates/portal-solutions-morphic-wasm/pkg",
+    "crates/portal-solutions-morphic-wasm/pkg-wasm2js"
+  ],
   "description": "A modern UI and rendering framework, inspired by X11, SwiftUI, and the Web"
 }
