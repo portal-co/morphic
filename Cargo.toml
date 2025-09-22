@@ -7,4 +7,3 @@ license = "MPL-2.0"
 description = "A modern UI and rendering framework, inspired by X11, SwiftUI, and the Web"
 
 [workspace.dependencies]
-
