@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/portal-solutions-morphic-wasm"]
+members = ["crates/morphic-wasm-web"]
 resolver = "3"
 
 [workspace.package]
