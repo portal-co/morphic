@@ -3,7 +3,8 @@
   "workspaces": [
     "crates/portal-solutions-morphic-wasm/pkg",
     "crates/portal-solutions-morphic-wasm/pkg-wasm2js",
-    "packages/rollup"
+    "packages/rollup",
+    "packages/web"
   ],
   "description": "A modern UI and rendering framework, inspired by X11, SwiftUI, and the Web",
   "devDependencies": {
