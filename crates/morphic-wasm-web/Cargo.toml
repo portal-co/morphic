@@ -2,7 +2,7 @@
 name = "portal-solutions-morphic-wasm-web"
 version = "0.1.0"
 authors = ["Graham Kelly <gkgoat6700@gmail.com>"]
-edition = "2018"
+edition = "2024"
 license.workspace = true
 description.workspace = true
 [lib]
