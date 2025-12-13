@@ -11,26 +11,23 @@ use atomic_waker::AtomicWaker;
 use winit::{
     application::ApplicationHandler,
     event::WindowEvent,
-    event_loop::{EventLoop, EventLoopProxy},
+    event_loop::{self, EventLoop, EventLoopProxy},
     window::{Window, WindowAttributes, WindowId},
 };
 #[derive(Clone, Default)]
+#[non_exhaustive]
 pub struct Core {
-    pipe: CorePipe,
+    pub pipe: CorePipe,
 }
 #[derive(Clone, Default)]
+#[non_exhaustive]
 pub struct CorePipe {
     core_windows: Arc<Mutex<BTreeMap<WindowId, Arc<CoreWindow>>>>,
     event_loop: Arc<OnceLock<EventLoopProxy<()>>>,
-    window_queue: Arc<
-        Mutex<
-            Vec<(
-                WindowAttributes,
-                Arc<OnceLock<WindowId>>,
-                Option<Arc<AtomicWaker>>,
-            )>,
-        >,
-    >,
+    queue: Arc<Mutex<Vec<(QueueEntry, Option<Arc<AtomicWaker>>)>>>,
+}
+enum QueueEntry {
+    CreateWindow(WindowAttributes, Arc<OnceLock<WindowId>>),
 }
 pub struct CoreWindow {
     window: Window,
@@ -74,9 +71,8 @@ impl Future for CreateWindow {
             let lock: Arc<OnceLock<WindowId>> = Arc::new(OnceLock::new());
             let b = Arc::new(AtomicWaker::new());
             b.register(cx.waker());
-            self.pipe.window_queue.lock().unwrap().push((
-                self.attrs.clone(),
-                lock.clone(),
+            self.pipe.queue.lock().unwrap().push((
+                QueueEntry::CreateWindow(self.attrs.clone(), lock.clone()),
                 Some(b.clone()),
             ));
             (lock, b)
@@ -92,22 +88,31 @@ impl Future for CreateWindow {
         }
     }
 }
-impl ApplicationHandler for CorePipe {
-    fn resumed(&mut self, event_loop: &winit::event_loop::ActiveEventLoop) {
-        let mut q = self.window_queue.lock().unwrap();
-        for (a, b, c) in take(&mut *q) {
-            if let Ok(w) = event_loop.create_window(a) {
-                let window = Arc::new(CoreWindow { window: w });
-                self.core_windows
-                    .lock()
-                    .unwrap()
-                    .insert(window.window.id(), window.clone());
-                b.set(window.window.id());
-                if let Some(waker) = c {
-                    waker.wake();
+impl CorePipe {
+    fn sync(&self, event_loop: &winit::event_loop::ActiveEventLoop) {
+        let mut q = self.queue.lock().unwrap();
+        for (a, c) in take(&mut *q) {
+            match a {
+                QueueEntry::CreateWindow(a, b) => {
+                    if let Ok(w) = event_loop.create_window(a) {
+                        let window = Arc::new(CoreWindow { window: w });
+                        self.core_windows
+                            .lock()
+                            .unwrap()
+                            .insert(window.window.id(), window.clone());
+                        b.set(window.window.id());
+                        if let Some(waker) = c {
+                            waker.wake();
+                        }
+                    }
                 }
             }
         }
+    }
+}
+impl ApplicationHandler for CorePipe {
+    fn resumed(&mut self, event_loop: &winit::event_loop::ActiveEventLoop) {
+        self.sync(event_loop);
     }
 
     fn window_event(
@@ -116,6 +121,7 @@ impl ApplicationHandler for CorePipe {
         window_id: winit::window::WindowId,
         event: winit::event::WindowEvent,
     ) {
+        self.sync(event_loop);
         if let WindowEvent::Destroyed = event
             && let Some(core) = self.core_windows.lock().unwrap().remove(&window_id)
         {}
