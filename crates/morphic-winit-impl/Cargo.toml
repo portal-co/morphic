@@ -1,0 +1,12 @@
+[package]
+name = "morphic-winit-impl"
+version = "0.1.0"
+edition = "2024"
+license.workspace = true
+description.workspace = true
+
+[dependencies]
+winit.workspace = true
+atomic-waker.workspace = true
+[features]
+web=[]

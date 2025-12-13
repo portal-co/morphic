@@ -401,6 +401,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "morphic-winit-impl"
+version = "0.1.0"
+dependencies = [
+ "atomic-waker",
+ "winit",
+]
+
+[[package]]
 name = "ndk"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -715,6 +723,7 @@ version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
  "js-sys",
+ "morphic-winit-impl",
  "wasm-bindgen",
  "wasm-bindgen-test",
  "winit",

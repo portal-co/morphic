@@ -1,14 +1,18 @@
 mod utils;
 
-use std::{collections::BTreeMap, sync::{Arc, Mutex, OnceLock}};
+use std::{
+    collections::BTreeMap,
+    sync::{Arc, Mutex, OnceLock},
+};
 
 use js_sys::{Array, Object, Reflect};
 use wasm_bindgen::prelude::*;
 use winit::{
-    application::ApplicationHandler, event::WindowEvent, event_loop::EventLoop, window::{Window, WindowId}
+    application::ApplicationHandler,
+    event::WindowEvent,
+    event_loop::EventLoop,
+    window::{Window, WindowAttributes, WindowId},
 };
-
-use crate::render::CoreWindow;
 
 #[wasm_bindgen(module = "@portal-solutions/morphic-wasm-dep-rollup")]
 extern "C" {
@@ -28,9 +32,8 @@ pub mod render;
 #[derive(Clone)]
 pub struct Core {
     _private: (),
-    event_loop: Arc<OnceLock<EventLoop<()>>>,
+    base: morphic_winit_impl::Core,
     create_canvas: JsValue,
-    core_windows: Arc<Mutex<BTreeMap<WindowId,Arc<CoreWindow>>>>
 }
 
 #[wasm_bindgen]
@@ -41,9 +44,10 @@ impl Core {
         let create_canvas = get("createCanvas")?;
         Ok(Self {
             _private: (),
-            event_loop: Default::default(),
+            // event_loop: Default::default(),
             create_canvas,
-            core_windows: Default::default(),
+            base: Default::default(),
+            // core_windows: Default::default(),
         })
     }
 }
