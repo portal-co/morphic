@@ -8,5 +8,6 @@ description.workspace = true
 [dependencies]
 winit.workspace = true
 atomic-waker.workspace = true
+morphic-platform-abstraction.workspace = true
 [features]
 web=[]

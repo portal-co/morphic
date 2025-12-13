@@ -401,10 +401,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "morphic-platform-abstraction"
+version = "0.1.0"
+
+[[package]]
 name = "morphic-winit-impl"
 version = "0.1.0"
 dependencies = [
  "atomic-waker",
+ "morphic-platform-abstraction",
  "winit",
 ]
 
@@ -723,6 +728,7 @@ version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
  "js-sys",
+ "morphic-platform-abstraction",
  "morphic-winit-impl",
  "wasm-bindgen",
  "wasm-bindgen-test",

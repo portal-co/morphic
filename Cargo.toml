@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/morphic-wasm-web", "crates/morphic-winit-impl"]
+members = ["crates/morphic-platform-abstraction","crates/morphic-wasm-web", "crates/morphic-winit-impl"]
 resolver = "3"
 
 [workspace.package]
@@ -9,3 +9,5 @@ description = "A modern UI and rendering framework, inspired by X11, SwiftUI, an
 [workspace.dependencies]
 atomic-waker = "1.1.2"
 winit = { version = "0.30.12", default-features = false }
+morphic-winit-impl = {path="crates/morphic-winit-impl"}
+morphic-platform-abstraction = {path="crates/morphic-platform-abstraction"}
