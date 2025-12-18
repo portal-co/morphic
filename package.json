@@ -1,8 +1,8 @@
 {
   "name": "@portal-solutions/morphic",
   "workspaces": [
-    "crates/portal-solutions-morphic-wasm/pkg",
-    "crates/portal-solutions-morphic-wasm/pkg-wasm2js",
+    "crates/platform/portal-solutions-morphic-wasm/pkg",
+    "crates/platform/portal-solutions-morphic-wasm/pkg-wasm2js",
     "packages/rollup",
     "packages/web"
   ],

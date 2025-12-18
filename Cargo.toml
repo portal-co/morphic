@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/morphic-platform-abstraction","crates/morphic-wasm-web", "crates/morphic-winit-impl"]
+members = ["crates/platform/morphic-platform-abstraction","crates/platform/morphic-wasm-web", "crates/platform/morphic-winit-impl"]
 resolver = "3"
 
 [workspace.package]
